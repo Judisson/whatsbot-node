@@ -1,7 +1,7 @@
 const dotenv = require("dotenv").config();
 const connectMongoDB = require("./db/mongoDB");
 const express = require("express");
-const app = express();
+const app = require("./config/express");
 const PORT = process.env.PORT || 3332;
 
 const Chat = require("./db/models/chat.model");
