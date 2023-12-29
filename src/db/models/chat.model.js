@@ -23,7 +23,8 @@ const messageSchema = new mongoose.Schema({
     from: String,
     to: String,
     timestamp: Date,
-    body: String,
+    text: { body: String },
+    // body: String,
     type: String,
     contact_name: String, //name
     contact_number: String, //wa_id
