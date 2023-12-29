@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router();
-const Chat = require("../db/models/chat.model");
+const controller = require('../controllers/message.controller');
+const Chat = require('../db/models/chat.model');
 
 router.post("/mensagens-recebidas-data", async (req, res) => {
   console.log("Dados recebidos: ");

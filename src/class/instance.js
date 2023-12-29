@@ -1,9 +1,18 @@
 const pino = require('pino')
-const Chat = require('../models/chat.model')
+const Chat = require('../db/models/chat.model')
 const axios = require('axios')
 const config = require('../config/config')
 const logger = require('pino')()
 
+// class WhatsAppInstance {
+//   async receiveMessage (data) {
+//     //teste
+//   }
+// }
+
+const receiveMessage = async (messsage) => {
+
+}
 
 const sendMessage = async (message) => {
   try {
@@ -24,3 +33,5 @@ const sendMessage = async (message) => {
     console.error('Erro ao enviar mensagem:', error);
   }
 };
+
+module.exports = { receiveMessage }
