@@ -3,14 +3,15 @@ const configDB = require("./configDB");
 const logger = require("pino")();
 // console.log(config.moongoose.enabled)
 
-const connectMongoDB = () => {
+
+const connectMongoDB = async () => {
   if (configDB.moongoose.enabled) {
-    mongoose
+    await mongoose
       .connect(configDB.moongoose.url)
       .then(() => {
         logger.info("Connected to MongoDB");
       })
-      .catch((err) => console.error("Error connecting to MongoDB"));
+      .catch((err) => console.error("Error connecting to MongoDB: ", err));
   }
 };
 
