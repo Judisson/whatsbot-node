@@ -24,7 +24,6 @@ const messageSchema = new mongoose.Schema({
     to: String,
     timestamp: Date,
     text: { body: String },
-    // body: String,
     type: String,
     contact_name: String, //name
     contact_number: String, //wa_id
