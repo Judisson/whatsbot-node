@@ -1,7 +1,7 @@
 const pino = require('pino')
 const Chat = require('../models/chat.model')
 const axios = require('axios')
-const config = require('../../config/config')
+const config = require('../config/config')
 const logger = require('pino')()
 
 
