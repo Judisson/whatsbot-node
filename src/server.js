@@ -4,6 +4,7 @@ const express = require("express");
 const app = require("./config/express");
 const PORT = process.env.PORT || 3332;
 
+// console.log('app', app)
 // const testMessage = true;
 
 //---------------------------------------------------------------------------------
