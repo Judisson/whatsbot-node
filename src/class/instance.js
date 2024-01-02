@@ -8,6 +8,12 @@ const logger = require('pino')();
 const receiveMessage = async (objChat) => {
   let { chatId, messages } = objChat;
   let message = messages[0].text.body;
+  console.log('receiveMessage: ', messages);
+  let objMessageGPT = {
+    contact_number: messages[0].contact_number,
+    text: message,
+    type: messages[0].type,
+  };
 
   // console.log('messages', messages);
 
@@ -36,7 +42,7 @@ const receiveMessage = async (objChat) => {
       );
   }
 
-  sendMessageGPT(message);
+  sendMessageGPT(objMessageGPT);
 };
 
 const statusMessage = async (objStatus) => {
@@ -62,17 +68,18 @@ const statusMessage = async (objStatus) => {
     .catch((err) => console.log(err));
 };
 
-const sendMessageClient = async (message, to, typeMessage) => {
-  console.log('sendMessageClient', message);
-  return axios
+const sendMessageClient = async (objMessageResponse) => {
+  let { contact_number, response_question, type } = objMessageResponse;
+  // console.log('sendMessageClient', message);
+  return { data } = await axios
     .post(
       process.env.WHATSAPP_API_URL,
       {
         messaging_product: 'whatsapp',
-        to: '5561996985714',
-        type: 'text',
+        to: contact_number,
+        type: type,
         text: {
-          body: message,
+          body: response_question,
         },
       },
       {
@@ -83,6 +90,9 @@ const sendMessageClient = async (message, to, typeMessage) => {
       }
     )
     .then((response) => {
+      if (!response.data.response_question) {
+        throw new Error('Mensagem não encontrada, por isso não enviada!');
+      }
       return response.data;
     })
     .catch((err) => {
@@ -90,12 +100,16 @@ const sendMessageClient = async (message, to, typeMessage) => {
     });
 };
 
-const sendMessageGPT = async (message) => {
-  return axios
+const sendMessageGPT = async (objMessage) => {
+  console.log("104 - objMessage : ",objMessage)
+  let { contact_number, text, type } = objMessage;
+  return { data } = await axios
     .post(
       process.env.CHATGPT_SERVER_API_URL,
       {
-        question: message,
+        contact_number,
+        question: text,
+        type,
       },
       {
         headers: {
@@ -104,10 +118,16 @@ const sendMessageGPT = async (message) => {
       }
     )
     .then((response) => {
-      return response;
+      let data = response.data;
+      console.log('----------------------------------------------------------');
+      console.log('\n');
+      console.log('sendMessageGPT: ', data);
+      console.log('\n');
+      console.log('----------------------------------------------------------');
+      return response.data;
     })
     .catch((err) => {
-      console.error('Erro ao enviar mensagem:', err);
+      console.error('Erro ao enviar mensagem para o ChatGPT:', err.data);
     });
 };
 
