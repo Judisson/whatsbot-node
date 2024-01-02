@@ -70,8 +70,8 @@ const statusMessage = async (objStatus) => {
 
 const sendMessageClient = async (objMessageResponse) => {
   let { contact_number, response_question, type } = objMessageResponse;
-  // console.log('sendMessageClient', message);
-  return { data } = await axios
+  console.log('73(instance) - sendMessageClient', objMessageResponse);
+  let data = await axios
     .post(
       process.env.WHATSAPP_API_URL,
       {
@@ -93,17 +93,33 @@ const sendMessageClient = async (objMessageResponse) => {
       if (!response.data.response_question) {
         throw new Error('Mensagem não encontrada, por isso não enviada!');
       }
+      console.log('----------------------------------------------------------');
+      console.log('\n');
+      console.log('98(instance) - sendMessageClient : ', response);
+      console.log('\n');
+      console.log('----------------------------------------------------------');
       return response.data;
     })
     .catch((err) => {
-      console.error(err);
+      console.error("104(instance) - sendMessageClient error : ");
     });
+  console.log('----------------------------------------------------------');
+  console.log('\n');
+  console.log('103(instance) - sendMessageClient : ', data);
+  console.log('\n');
+  console.log('----------------------------------------------------------');
+  return data;
 };
 
 const sendMessageGPT = async (objMessage) => {
-  console.log("104 - objMessage : ",objMessage)
+  console.log('----------------------------------------------------------');
+  console.log('\n');
+  console.log('112(instance) - objMessage : ', objMessage);
+  console.log('\n');
+  console.log('----------------------------------------------------------');
+
   let { contact_number, text, type } = objMessage;
-  return { data } = await axios
+  let data = await axios
     .post(
       process.env.CHATGPT_SERVER_API_URL,
       {
@@ -129,6 +145,12 @@ const sendMessageGPT = async (objMessage) => {
     .catch((err) => {
       console.error('Erro ao enviar mensagem para o ChatGPT:', err.data);
     });
+  console.log('----------------------------------------------------------');
+  console.log('\n');
+  console.log('145(instance) - sendMessageGPT Data : ', data);
+  console.log('\n');
+  console.log('----------------------------------------------------------');
+  return data;
 };
 
 module.exports = { receiveMessage, statusMessage, sendMessageClient };
