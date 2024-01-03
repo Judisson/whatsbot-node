@@ -68,49 +68,6 @@ const statusMessage = async (objStatus) => {
     .catch((err) => console.log(err));
 };
 
-const sendMessageClient = async (objMessageResponse) => {
-  let { contact_number, response_question, type } = objMessageResponse;
-  console.log('73(instance) - sendMessageClient', objMessageResponse);
-  let data = await axios
-    .post(
-      process.env.WHATSAPP_API_URL,
-      {
-        messaging_product: 'whatsapp',
-        to: contact_number,
-        type: type,
-        text: {
-          body: response_question,
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-    .then((response) => {
-      if (!response.data.response_question) {
-        throw new Error('Mensagem não encontrada, por isso não enviada!');
-      }
-      console.log('----------------------------------------------------------');
-      console.log('\n');
-      console.log('98(instance) - sendMessageClient : ', response);
-      console.log('\n');
-      console.log('----------------------------------------------------------');
-      return response.data;
-    })
-    .catch((err) => {
-      console.error("104(instance) - sendMessageClient error : ");
-    });
-  console.log('----------------------------------------------------------');
-  console.log('\n');
-  console.log('103(instance) - sendMessageClient : ', data);
-  console.log('\n');
-  console.log('----------------------------------------------------------');
-  return data;
-};
-
 const sendMessageGPT = async (objMessage) => {
   console.log('----------------------------------------------------------');
   console.log('\n');
@@ -148,6 +105,49 @@ const sendMessageGPT = async (objMessage) => {
   console.log('----------------------------------------------------------');
   console.log('\n');
   console.log('145(instance) - sendMessageGPT Data : ', data);
+  console.log('\n');
+  console.log('----------------------------------------------------------');
+  return data;
+};
+
+const sendMessageClient = async (objMessageResponse) => {
+  let { contact_number, response_question, type } = objMessageResponse;
+  console.log('73(instance) - sendMessageClient', objMessageResponse);
+  let data = await axios
+    .post(
+      process.env.WHATSAPP_API_URL,
+      {
+        messaging_product: 'whatsapp',
+        to: contact_number,
+        type: type,
+        text: {
+          body: response_question,
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+    .then((response) => {
+      if (!response.data.messages) {
+        throw new Error('Mensagem não encontrada, por isso não enviada!');
+      }
+      console.log('----------------------------------------------------------');
+      console.log('\n');
+      console.log('98(instance) - sendMessageClient : ', response.data);
+      console.log('\n');
+      console.log('----------------------------------------------------------');
+      return response.data;
+    })
+    .catch((err) => {
+      console.error("104(instance) - sendMessageClient error : ");
+    });
+  console.log('----------------------------------------------------------');
+  console.log('\n');
+  console.log('103(instance) - sendMessageClient : ', data);
   console.log('\n');
   console.log('----------------------------------------------------------');
   return data;
