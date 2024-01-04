@@ -15,11 +15,7 @@ const receiveMessage = async (objChat) => {
     type: messages[0].type,
   };
 
-  // console.log('messages', messages);
-
   let chat = await Chat.findOne({ chatId: chatId });
-
-  // console.log('chatComplete', chat);
 
   if (!chat) {
     let newChat = new Chat({
@@ -68,15 +64,15 @@ const statusMessage = async (objStatus) => {
     .catch((err) => console.log(err));
 };
 
-const sendMessageGPT = async (objMessage) => {
+const sendMessageGPT = async (objClientMessage) => {
   console.log('----------------------------------------------------------');
   console.log('\n');
-  console.log('112(instance) - objMessage : ', objMessage);
+  console.log('112(instance) - objClientMessage : ', objClientMessage);
   console.log('\n');
   console.log('----------------------------------------------------------');
 
-  let { contact_number, text, type } = objMessage;
-  let data = await axios
+  let { contact_number, text, type } = objClientMessage;
+  let { data } = await axios
     .post(
       process.env.CHATGPT_SERVER_API_URL,
       {
@@ -97,7 +93,7 @@ const sendMessageGPT = async (objMessage) => {
       console.log('sendMessageGPT: ', data);
       console.log('\n');
       console.log('----------------------------------------------------------');
-      return response.data;
+      return response;
     })
     .catch((err) => {
       console.error('Erro ao enviar mensagem para o ChatGPT:', err.data);
@@ -110,10 +106,11 @@ const sendMessageGPT = async (objMessage) => {
   return data;
 };
 
+
 const sendMessageClient = async (objMessageResponse) => {
   let { contact_number, response_question, type } = objMessageResponse;
   console.log('73(instance) - sendMessageClient', objMessageResponse);
-  let data = await axios
+  let { data } = await axios
     .post(
       process.env.WHATSAPP_API_URL,
       {
@@ -132,34 +129,25 @@ const sendMessageClient = async (objMessageResponse) => {
       }
     )
     .then((response) => {
-      if (!response.data.messages) {
-        throw new Error('Mensagem não encontrada, por isso não enviada!');
-      }
+      // if (!response.data.messages) {
+      //   throw new Error('Mensagem não encontrada, por isso não enviada!');
+      // }
       console.log('----------------------------------------------------------');
       console.log('\n');
-      console.log('98(instance) - sendMessageClient : ', response.data);
+      console.log('145(instance) - sendMessageClient : ', response.data);
       console.log('\n');
       console.log('----------------------------------------------------------');
-      return response.data;
+      return response;
     })
     .catch((err) => {
-      console.error("104(instance) - sendMessageClient error : ");
+      console.error("151(instance) - sendMessageClient error : ", err.data);
     });
-  console.log('----------------------------------------------------------');
-  console.log('\n');
-  console.log('103(instance) - sendMessageClient : ', data);
-  console.log('\n');
-  console.log('----------------------------------------------------------');
+  // console.log('----------------------------------------------------------');
+  // console.log('\n');
+  // console.log('155(instance) - sendMessageClient : ', data);
+  // console.log('\n');
+  // console.log('----------------------------------------------------------');
   return data;
 };
 
 module.exports = { receiveMessage, statusMessage, sendMessageClient };
-
-// body: {
-//   messaging_product: 'whatsapp',
-//   to: '5561996985714',
-//   type: 'text',
-//   text: {
-//     body: message,
-//   },
-// },

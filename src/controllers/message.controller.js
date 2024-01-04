@@ -19,6 +19,6 @@ exports.Response = async (req, res) => {
     const data = await sendMessageClient(
         req.body
     )
-    console.log("Data que vem do ServidorGPT: ", data)
+    // console.log("Data que vem do ServidorGPT: ", data)
     return res.status(200).json(data)
 }
